@@ -11,10 +11,10 @@ export class Income {
   @Prop({ required: true })
   amount: number;
 
-  @Prop({ required: true })
+  @Prop()
   incomeGroup: string;
 
-  @Prop({ required: true })
+  @Prop()
   user: string;
 }
 
