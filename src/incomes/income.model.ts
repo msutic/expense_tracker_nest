@@ -17,3 +17,5 @@ export class Income {
   @Prop({ required: true })
   user: string;
 }
+
+export const IncomeSchema = SchemaFactory.createForClass(Income);
