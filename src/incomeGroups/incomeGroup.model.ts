@@ -12,7 +12,7 @@ export class IncomeGroup {
   @Prop({ required: true })
   description: string;
 
-  @Prop()
+  @Prop({ required: true, default: false })
   isDefault: boolean;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
