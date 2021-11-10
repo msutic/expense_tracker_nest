@@ -9,9 +9,8 @@ export class IncomeGroupsService {
     @InjectModel(IncomeGroup.name)
     private incomeGroupModel: Model<IncomegroupDocument>,
   ) {}
-  incomeGroups: IncomeGroup[];
 
   async getAll(): Promise<IncomeGroup[]> {
-    return this.incomeGroupModel.find().exec();
+    return this.incomeGroupModel.find().populate('user');
   }
 }

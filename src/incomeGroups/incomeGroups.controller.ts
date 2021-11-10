@@ -7,8 +7,6 @@ export class IncomeGroupsController {
 
   @Get()
   getAll(): any {
-    console.log('HEEEY');
-
     return this.incomeGroupsService.getAll();
   }
 }
