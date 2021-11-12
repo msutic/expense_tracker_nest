@@ -25,6 +25,9 @@ export class IncomeGroupsController {
     @Param('id') id: string,
     @Body() updateIncomeGroupDto: UpdateIncomeGroupDto,
   ) {
+    this.incomeGroupsService
+      .update(id, updateIncomeGroupDto)
+      .then((res) => console.log(res));
     return `This action updates a #${id} income group`;
   }
 }
