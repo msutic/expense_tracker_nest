@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { IncomeGroupDto } from './incomeGroup.dto';
+import { CreateIncomeGroupDto } from './incomeGroup.dto';
 import { IncomeGroup, IncomegroupDocument } from './incomeGroup.model';
 
 @Injectable()
@@ -15,8 +15,9 @@ export class IncomeGroupsService {
     return this.incomeGroupModel.find().populate('user');
   }
 
-  async create(incomeGroupDto: IncomeGroupDto): Promise<IncomeGroup> {
+  async create(incomeGroupDto: CreateIncomeGroupDto) {
     const createdIncomeGroup = new this.incomeGroupModel(incomeGroupDto);
-    return createdIncomeGroup.save();
+    await createdIncomeGroup.save();
+    return createdIncomeGroup;
   }
 }

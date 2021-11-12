@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { IncomeGroupDto } from './incomeGroup.dto';
+import { Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common';
+import { CreateIncomeGroupDto } from './incomeGroup.dto';
+import { UpdateIncomeGroupDto } from './incomeGroup.dto';
 import { IncomeGroupsService } from './incomeGroups.service';
 
 @Controller('income-groups')
@@ -12,8 +13,18 @@ export class IncomeGroupsController {
   }
 
   @Post()
-  create(@Body() incomeGroupDto: IncomeGroupDto): string {
-    this.incomeGroupsService.create(incomeGroupDto);
-    return 'This action adds a new incomeGroup';
+  create(@Body() incomeGroupDto: CreateIncomeGroupDto) {
+    this.incomeGroupsService
+      .create(incomeGroupDto)
+      .then((incGroup) => console.log(`Added new income group: ${incGroup}`))
+      .catch((error) => console.log(error));
+  }
+
+  @Put(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateIncomeGroupDto: UpdateIncomeGroupDto,
+  ) {
+    return `This action updates a #${id} income group`;
   }
 }
