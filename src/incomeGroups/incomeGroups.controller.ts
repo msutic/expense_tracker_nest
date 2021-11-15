@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common';
 import { CreateIncomeGroupDto } from './incomeGroup.dto';
 import { UpdateIncomeGroupDto } from './incomeGroup.dto';
 import { IncomeGroupsService } from './incomeGroups.service';
@@ -21,13 +31,29 @@ export class IncomeGroupsController {
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateIncomeGroupDto: UpdateIncomeGroupDto,
   ) {
-    this.incomeGroupsService
+    await this.incomeGroupsService
       .update(id, updateIncomeGroupDto)
-      .then((res) => console.log(res));
-    return `This action updates a #${id} income group`;
+      .then((res) => {
+        console.log(res);
+        return 'USPESNO';
+      })
+      .catch((error) => {
+        console.log(error);
+        return 'neuspesnO!';
+      });
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    try {
+      await this.incomeGroupsService.delete(id);
+    } catch {
+      throw new NotFoundException(`Income group with id #${id} not found`);
+    }
+    return `Successfully deleted income group with id ${id}`;
   }
 }

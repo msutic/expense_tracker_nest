@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateIncomeGroupDto, UpdateIncomeGroupDto } from './incomeGroup.dto';
@@ -22,6 +22,14 @@ export class IncomeGroupsService {
   }
 
   async update(id: string, incomeGroupDto: UpdateIncomeGroupDto) {
-    return this.incomeGroupModel.findByIdAndUpdate(id, incomeGroupDto);
+    try {
+      await this.incomeGroupModel.findByIdAndUpdate(id, incomeGroupDto);
+    } catch {
+      throw new NotFoundException(`Could not find income group with id ${id}`);
+    }
+  }
+
+  delete(id: string) {
+    return this.incomeGroupModel.findByIdAndDelete(id);
   }
 }
