@@ -1,11 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { Income } from './income.model';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CreateIncomeDto } from './income.dto';
+import { Income, IncomeDocument } from './income.model';
 
 @Injectable()
 export class IncomeService {
-  incomes: Income[];
+  constructor(
+    @InjectModel(Income.name) private incomeModel: Model<IncomeDocument>,
+  ) {}
 
-  getAll(): any {
-    return this.incomes;
+  getAll() {
+    return this.incomeModel
+      .find()
+      .populate('user')
+      .populate('incomeGroup')
+      .exec();
+  }
+
+  create(incomeDto: CreateIncomeDto) {
+    const income = new this.incomeModel(incomeDto);
+    return income.save();
   }
 }
