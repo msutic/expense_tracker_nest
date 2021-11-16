@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateIncomeDto } from './income.dto';
+import { CreateIncomeDto, UpdateIncomeDto } from './income.dto';
 import { Income, IncomeDocument } from './income.model';
 
 @Injectable()
@@ -21,5 +21,13 @@ export class IncomeService {
   create(incomeDto: CreateIncomeDto) {
     const income = new this.incomeModel(incomeDto);
     return income.save();
+  }
+
+  update(id: string, incomeDto: UpdateIncomeDto) {
+    return this.incomeModel
+      .findByIdAndUpdate(id, incomeDto, { new: true })
+      .populate('user')
+      .populate('incomeGroup')
+      .exec();
   }
 }
