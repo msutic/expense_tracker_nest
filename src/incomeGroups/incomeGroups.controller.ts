@@ -3,11 +3,9 @@ import {
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   Post,
   Put,
-  Res,
 } from '@nestjs/common';
 import { CreateIncomeGroupDto } from './incomeGroup.dto';
 import { UpdateIncomeGroupDto } from './incomeGroup.dto';
