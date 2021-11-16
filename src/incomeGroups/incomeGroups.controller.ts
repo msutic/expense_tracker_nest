@@ -18,16 +18,13 @@ export class IncomeGroupsController {
   constructor(private readonly incomeGroupsService: IncomeGroupsService) {}
 
   @Get()
-  getAll(): any {
+  async getAll() {
     return this.incomeGroupsService.getAll();
   }
 
   @Post()
-  create(@Body() incomeGroupDto: CreateIncomeGroupDto) {
-    this.incomeGroupsService
-      .create(incomeGroupDto)
-      .then((incGroup) => console.log(`Added new income group: ${incGroup}`))
-      .catch((error) => console.log(error));
+  async create(@Body() incomeGroupDto: CreateIncomeGroupDto) {
+    return this.incomeGroupsService.create(incomeGroupDto);
   }
 
   @Put(':id')
@@ -35,25 +32,24 @@ export class IncomeGroupsController {
     @Param('id') id: string,
     @Body() updateIncomeGroupDto: UpdateIncomeGroupDto,
   ) {
-    await this.incomeGroupsService
-      .update(id, updateIncomeGroupDto)
-      .then((res) => {
-        console.log(res);
-        return 'USPESNO';
-      })
-      .catch((error) => {
-        console.log(error);
-        return 'neuspesnO!';
-      });
+    try {
+      const updatedIncGroup = await this.incomeGroupsService.update(
+        id,
+        updateIncomeGroupDto,
+      );
+      return `Successfully updated income group with id #${id}\n${updatedIncGroup}`;
+    } catch {
+      return `Income group with id #${id} not found`;
+    }
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
     try {
-      await this.incomeGroupsService.delete(id);
+      const incomeGroup = await this.incomeGroupsService.delete(id);
+      return { status: 'success', deletedIncomeGroup: incomeGroup };
     } catch {
-      throw new NotFoundException(`Income group with id #${id} not found`);
+      return 'e pa nista';
     }
-    return `Successfully deleted income group with id ${id}`;
   }
 }

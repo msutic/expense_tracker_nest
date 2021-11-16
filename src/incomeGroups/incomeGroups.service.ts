@@ -11,25 +11,23 @@ export class IncomeGroupsService {
     private incomeGroupModel: Model<IncomegroupDocument>,
   ) {}
 
-  async getAll(): Promise<IncomeGroup[]> {
-    return this.incomeGroupModel.find().populate('user');
+  getAll() {
+    return this.incomeGroupModel.find().populate('user').exec();
   }
 
-  async create(incomeGroupDto: CreateIncomeGroupDto) {
+  create(incomeGroupDto: CreateIncomeGroupDto) {
     const createdIncomeGroup = new this.incomeGroupModel(incomeGroupDto);
-    await createdIncomeGroup.save();
-    return createdIncomeGroup;
+    return createdIncomeGroup.save();
   }
 
-  async update(id: string, incomeGroupDto: UpdateIncomeGroupDto) {
-    try {
-      await this.incomeGroupModel.findByIdAndUpdate(id, incomeGroupDto);
-    } catch {
-      throw new NotFoundException(`Could not find income group with id ${id}`);
-    }
+  update(id: string, incomeGroupDto: UpdateIncomeGroupDto) {
+    return this.incomeGroupModel
+      .findByIdAndUpdate(id, incomeGroupDto)
+      .populate('user')
+      .exec();
   }
 
   delete(id: string) {
-    return this.incomeGroupModel.findByIdAndDelete(id);
+    return this.incomeGroupModel.findByIdAndDelete(id).populate('user');
   }
 }
