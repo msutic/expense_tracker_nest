@@ -33,11 +33,11 @@ export class IncomeGroupsController {
     @Body() updateIncomeGroupDto: UpdateIncomeGroupDto,
   ) {
     try {
-      const updatedIncGroup = await this.incomeGroupsService.update(
+      const incomeGroup = await this.incomeGroupsService.update(
         id,
         updateIncomeGroupDto,
       );
-      return `Successfully updated income group with id #${id}\n${updatedIncGroup}`;
+      return { status: 'success', incomeGroup };
     } catch {
       return `Income group with id #${id} not found`;
     }

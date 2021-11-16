@@ -22,7 +22,7 @@ export class IncomeGroupsService {
 
   update(id: string, incomeGroupDto: UpdateIncomeGroupDto) {
     return this.incomeGroupModel
-      .findByIdAndUpdate(id, incomeGroupDto)
+      .findByIdAndUpdate(id, incomeGroupDto, { new: true })
       .populate('user')
       .exec();
   }
