@@ -17,7 +17,10 @@ export class IncomeGroupsController {
 
   @Get()
   async getAll() {
-    return this.incomeGroupsService.getAll();
+    const incomeGroups = await this.incomeGroupsService.getAll();
+    const count = await this.incomeGroupsService.getCount();
+
+    return { incomeGroups, count };
   }
 
   @Get(':id')

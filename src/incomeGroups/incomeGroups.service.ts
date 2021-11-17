@@ -34,4 +34,8 @@ export class IncomeGroupsService {
   delete(id: string) {
     return this.incomeGroupModel.findByIdAndDelete(id).populate('user');
   }
+
+  getCount() {
+    return this.incomeGroupModel.count().exec();
+  }
 }
