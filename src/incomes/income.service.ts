@@ -18,6 +18,14 @@ export class IncomeService {
       .exec();
   }
 
+  getById(id: string) {
+    return this.incomeModel
+      .findById(id)
+      .populate('user')
+      .populate('incomeGroup')
+      .exec();
+  }
+
   create(incomeDto: CreateIncomeDto) {
     const income = new this.incomeModel(incomeDto);
     return income.save();

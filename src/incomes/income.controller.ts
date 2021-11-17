@@ -19,6 +19,16 @@ export class IncomeController {
     return this.incomesService.getAll();
   }
 
+  @Get(':id')
+  async getById(@Param('id') id: string) {
+    try {
+      const income = await this.incomesService.getById(id);
+      return { income };
+    } catch {
+      return `Income with id #${id} does not exist.`;
+    }
+  }
+
   @Post()
   async create(@Body() incomeDto: CreateIncomeDto) {
     return this.incomesService.create(incomeDto);
