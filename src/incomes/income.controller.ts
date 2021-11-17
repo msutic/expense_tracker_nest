@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CreateIncomeDto, UpdateIncomeDto } from './income.dto';
 import { IncomeService } from './income.service';
@@ -15,8 +16,10 @@ export class IncomeController {
   constructor(private readonly incomesService: IncomeService) {}
 
   @Get()
-  async getAll() {
-    const incomes = await this.incomesService.getAll();
+  async getAll(@Query() query) {
+    const { order, page, limit } = query;
+
+    const incomes = await this.incomesService.getAll(+order);
     const count = await this.incomesService.getCount();
     return { incomes, count };
   }

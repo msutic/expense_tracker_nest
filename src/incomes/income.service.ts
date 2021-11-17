@@ -10,11 +10,12 @@ export class IncomeService {
     @InjectModel(Income.name) private incomeModel: Model<IncomeDocument>,
   ) {}
 
-  getAll() {
+  getAll(order: number) {
     return this.incomeModel
       .find()
       .populate('user')
       .populate('incomeGroup')
+      .sort({ amount: order })
       .exec();
   }
 
