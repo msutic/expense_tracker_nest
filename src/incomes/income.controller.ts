@@ -19,7 +19,7 @@ export class IncomeController {
   async getAll(@Query() query) {
     const { order, page, limit } = query;
 
-    const incomes = await this.incomesService.getAll(+order);
+    const incomes = await this.incomesService.getAll(+order, +page, +limit);
     const count = await this.incomesService.getCount();
     return { incomes, count };
   }
