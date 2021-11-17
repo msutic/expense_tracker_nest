@@ -15,8 +15,10 @@ export class IncomeController {
   constructor(private readonly incomesService: IncomeService) {}
 
   @Get()
-  getAll() {
-    return this.incomesService.getAll();
+  async getAll() {
+    const incomes = await this.incomesService.getAll();
+    const count = await this.incomesService.getCount();
+    return { incomes, count };
   }
 
   @Get(':id')

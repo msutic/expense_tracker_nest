@@ -46,4 +46,8 @@ export class IncomeService {
       .populate('incomeGroup')
       .exec();
   }
+
+  getCount() {
+    return this.incomeModel.count();
+  }
 }
