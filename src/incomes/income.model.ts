@@ -14,7 +14,7 @@ export class Income {
   amount: number;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'IncomeGroup' })
-  incomeGroup: IncomeGroup;
+  incomeGroup: mongoose.Types.ObjectId;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: User;

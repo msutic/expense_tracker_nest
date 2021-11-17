@@ -31,6 +31,16 @@ export class IncomeService {
       .exec();
   }
 
+  getLastFiveByGroup(id: string) {
+    return this.incomeModel
+      .find({ incomeGroup: id })
+      .sort({ updatedAt: -1 })
+      .limit(5)
+      .populate('user')
+      .populate('incomeGroup')
+      .exec();
+  }
+
   getById(id: string) {
     return this.incomeModel
       .findById(id)

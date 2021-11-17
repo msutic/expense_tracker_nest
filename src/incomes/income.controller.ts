@@ -25,8 +25,18 @@ export class IncomeController {
   }
 
   @Get('recent')
-  async getLastFive() {
+  getLastFive() {
     return this.incomesService.getLastFive();
+  }
+
+  @Get('recent/:id')
+  getLastFiveByGroup(@Param('id') id: string) {
+    try {
+      const lastFive = this.incomesService.getLastFiveByGroup(id);
+      return lastFive;
+    } catch {
+      return `Income group with id #${id} does not exist`;
+    }
   }
 
   @Get(':id')
