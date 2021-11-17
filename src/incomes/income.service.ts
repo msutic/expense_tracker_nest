@@ -30,4 +30,12 @@ export class IncomeService {
       .populate('incomeGroup')
       .exec();
   }
+
+  delete(id: string) {
+    return this.incomeModel
+      .findByIdAndDelete(id)
+      .populate('user')
+      .populate('incomeGroup')
+      .exec();
+  }
 }

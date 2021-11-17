@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { CreateIncomeDto, UpdateIncomeDto } from './income.dto';
 import { IncomeService } from './income.service';
 
@@ -26,6 +34,16 @@ export class IncomeController {
       return { status: 'success', income };
     } catch {
       return `Income with id #${id} not found`;
+    }
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    try {
+      const income = await this.incomesService.delete(id);
+      return { status: 'success', deletedIncome: income };
+    } catch {
+      return `Income with id #${id} does not exist.`;
     }
   }
 }
