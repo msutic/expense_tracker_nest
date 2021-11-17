@@ -15,6 +15,10 @@ export class IncomeGroupsService {
     return this.incomeGroupModel.find().populate('user').exec();
   }
 
+  getById(id: string) {
+    return this.incomeGroupModel.findById(id).populate('user').exec();
+  }
+
   create(incomeGroupDto: CreateIncomeGroupDto) {
     const createdIncomeGroup = new this.incomeGroupModel(incomeGroupDto);
     return createdIncomeGroup.save();

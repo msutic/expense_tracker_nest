@@ -20,6 +20,16 @@ export class IncomeGroupsController {
     return this.incomeGroupsService.getAll();
   }
 
+  @Get(':id')
+  async getById(@Param('id') id: string) {
+    try {
+      const incomeGroup = await this.incomeGroupsService.getById(id);
+      return incomeGroup;
+    } catch {
+      return `Income group with id #${id} does not exist.`;
+    }
+  }
+
   @Post()
   async create(@Body() incomeGroupDto: CreateIncomeGroupDto) {
     return this.incomeGroupsService.create(incomeGroupDto);
