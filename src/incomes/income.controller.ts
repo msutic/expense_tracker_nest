@@ -24,6 +24,11 @@ export class IncomeController {
     return { incomes, count };
   }
 
+  @Get('recent')
+  async getLastFive() {
+    return this.incomesService.getLastFive();
+  }
+
   @Get(':id')
   async getById(@Param('id') id: string) {
     try {
