@@ -6,6 +6,7 @@ import { IncomeGroupsModule } from './incomeGroups/incomeGroups.module';
 import { UsersModule } from './users/users.module';
 import { IncomesModule } from './incomes/incomes.module';
 import { ValidatorMiddleware } from './common/middleware/validator.middleware';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ValidatorMiddleware } from './common/middleware/validator.middleware';
     IncomeGroupsModule,
     IncomesModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
