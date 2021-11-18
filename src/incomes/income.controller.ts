@@ -10,7 +10,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
 import { CreateIncomeDto, UpdateIncomeDto } from './income.dto';
 import { IncomeService } from './income.service';
 
@@ -56,11 +55,13 @@ export class IncomeController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() incomeDto: CreateIncomeDto) {
     return this.incomesService.create(incomeDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -74,6 +75,7 @@ export class IncomeController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     try {
