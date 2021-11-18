@@ -13,7 +13,11 @@ export class UsersService {
   }
 
   getByUsername(username: string) {
-    return this.userModel.findOne({ username: username }).exec();
+    return this.userModel.findOne({ username }).exec();
+  }
+
+  getById(id: string) {
+    return this.userModel.findById(id).exec();
   }
 
   async create({
