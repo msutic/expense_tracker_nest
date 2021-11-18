@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
 
 export type UserDocument = User & Document;
 
@@ -21,3 +22,19 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.pre<User>('save', async function (next: Function) {
+  const user = this;
+  const hashedPassword = await bcrypt.hash(user.password, 10);
+
+  user.password = hashedPassword;
+
+  next();
+});
+
+UserSchema.methods.comparePassword = async function comparePasswords<User>(
+  submittedPassword: string,
+) {
+  const isValid = await bcrypt.compare(submittedPassword, this.password);
+  return isValid;
+};
