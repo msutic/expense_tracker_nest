@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from 'src/users/user.dto';
+import { ConfigService } from '@nestjs/config';
+import { CreateUserDto, LoginUserDto } from 'src/users/user.dto';
+import { User } from 'src/users/user.model';
 import { UsersService } from 'src/users/users.service';
 import { RegistrationStatus } from './interfaces/registration-status.interface';
 
@@ -9,6 +11,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async validateUser(username: string, pass: string) {
@@ -20,10 +23,12 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+  async login(loginUserDto: LoginUserDto) {
+    const user = await this.usersService.findByLogin(loginUserDto);
+    const token = this._createToken(user);
     return {
-      access_token: this.jwtService.sign(payload),
+      username: user.username,
+      ...token,
     };
   }
 
@@ -42,5 +47,17 @@ export class AuthService {
       };
     }
     return status;
+  }
+
+  private _createToken({ username }: User): {
+    expiresIn: number | string;
+    accessToken: string;
+  } {
+    const user = { username };
+    const accessToken = this.jwtService.sign(user);
+    return {
+      expiresIn: this.configService.get('jwt.expires'),
+      accessToken,
+    };
   }
 }
