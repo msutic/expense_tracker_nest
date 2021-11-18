@@ -17,7 +17,7 @@ export class Income {
   incomeGroup: mongoose.Types.ObjectId;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  user: User;
+  user: mongoose.Types.ObjectId;
 }
 
 export const IncomeSchema = SchemaFactory.createForClass(Income);

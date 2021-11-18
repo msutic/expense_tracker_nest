@@ -6,7 +6,9 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreateIncomeGroupDto } from './incomeGroup.dto';
 import { UpdateIncomeGroupDto } from './incomeGroup.dto';
 import { IncomeGroupsService } from './incomeGroups.service';
@@ -15,6 +17,7 @@ import { IncomeGroupsService } from './incomeGroups.service';
 export class IncomeGroupsController {
   constructor(private readonly incomeGroupsService: IncomeGroupsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getAll() {
     const incomeGroups = await this.incomeGroupsService.getAll();
@@ -23,6 +26,7 @@ export class IncomeGroupsController {
     return { incomeGroups, count };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getById(@Param('id') id: string) {
     try {
@@ -33,11 +37,13 @@ export class IncomeGroupsController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() incomeGroupDto: CreateIncomeGroupDto) {
     return this.incomeGroupsService.create(incomeGroupDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -54,6 +60,7 @@ export class IncomeGroupsController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     try {
