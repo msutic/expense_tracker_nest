@@ -7,7 +7,10 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
 import { CreateIncomeDto, UpdateIncomeDto } from './income.dto';
 import { IncomeService } from './income.service';
 
@@ -15,6 +18,7 @@ import { IncomeService } from './income.service';
 export class IncomeController {
   constructor(private readonly incomesService: IncomeService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getAll(@Query() query) {
     const { order, page, limit } = query;
@@ -24,11 +28,13 @@ export class IncomeController {
     return { incomes, count };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('recent')
   getLastFive() {
     return this.incomesService.getLastFive();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('recent/:id')
   getLastFiveByGroup(@Param('id') id: string) {
     try {
@@ -39,6 +45,7 @@ export class IncomeController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getById(@Param('id') id: string) {
     try {
