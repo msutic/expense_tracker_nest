@@ -15,5 +15,6 @@ import { IncomeGroupsService } from './incomeGroups.service';
   ],
   controllers: [IncomeGroupsController],
   providers: [IncomeGroupsService, UsersService],
+  exports: [IncomeGroupsService],
 })
 export class IncomeGroupsModule {}

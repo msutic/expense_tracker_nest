@@ -11,6 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { IncomeGroupsService } from 'src/incomeGroups/incomeGroups.service';
 import { UsersService } from 'src/users/users.service';
 import { CreateIncomeDto, UpdateIncomeDto } from './income.dto';
 import { IncomeService } from './income.service';
@@ -19,6 +20,7 @@ import { IncomeService } from './income.service';
 export class IncomeController {
   constructor(
     private readonly incomesService: IncomeService,
+    private readonly incomeGroupsService: IncomeGroupsService,
     private readonly usersService: UsersService,
   ) {}
 
@@ -83,6 +85,15 @@ export class IncomeController {
   async create(@Body() incomeDto: CreateIncomeDto, @Request() req) {
     const { username } = req.user;
     const user = await this.usersService.getByUsername(username);
+    try {
+      const incomeGroup = await this.incomeGroupsService.getById(
+        incomeDto.incomeGroup,
+        user._id,
+      );
+      if (!incomeGroup) return "Cannot access someone else's group";
+    } catch {
+      return 'Selected income group does not exist!';
+    }
 
     return this.incomesService.create({ ...incomeDto, user: user._id });
   }
