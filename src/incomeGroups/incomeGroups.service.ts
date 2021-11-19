@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateIncomeGroupDto, UpdateIncomeGroupDto } from './incomeGroup.dto';
@@ -19,8 +20,8 @@ export class IncomeGroupsService {
     return this.incomeGroupModel.findById(id).populate('user').exec();
   }
 
-  create(incomeGroupDto: CreateIncomeGroupDto) {
-    const createdIncomeGroup = new this.incomeGroupModel(incomeGroupDto);
+  create(params) {
+    const createdIncomeGroup = new this.incomeGroupModel(params);
     return createdIncomeGroup.save();
   }
 

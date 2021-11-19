@@ -6,16 +6,20 @@ import {
   Param,
   Post,
   Put,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { CreateIncomeGroupDto } from './incomeGroup.dto';
-import { UpdateIncomeGroupDto } from './incomeGroup.dto';
+import { UsersService } from 'src/users/users.service';
+import { CreateIncomeGroupDto, UpdateIncomeGroupDto } from './incomeGroup.dto';
 import { IncomeGroupsService } from './incomeGroups.service';
 
 @Controller('income-groups')
 export class IncomeGroupsController {
-  constructor(private readonly incomeGroupsService: IncomeGroupsService) {}
+  constructor(
+    private readonly incomeGroupsService: IncomeGroupsService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -39,8 +43,13 @@ export class IncomeGroupsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() incomeGroupDto: CreateIncomeGroupDto) {
-    return this.incomeGroupsService.create(incomeGroupDto);
+  async create(@Body() incomeGroupDto: CreateIncomeGroupDto, @Request() req) {
+    const { username } = req.user;
+    const user = await this.usersService.getByUsername(username);
+    return this.incomeGroupsService.create({
+      ...incomeGroupDto,
+      user: user._id,
+    });
   }
 
   @UseGuards(JwtAuthGuard)
