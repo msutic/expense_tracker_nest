@@ -41,9 +41,9 @@ export class IncomeService {
       .exec();
   }
 
-  getById(id: string) {
+  getById(id: string, userId: string) {
     return this.incomeModel
-      .findById(id)
+      .findOne({ _id: id, user: userId })
       .populate('user')
       .populate('incomeGroup')
       .exec();

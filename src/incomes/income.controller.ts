@@ -59,9 +59,12 @@ export class IncomeController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string, @Request() req) {
+    const { username } = req.user;
+    const user = await this.usersService.getByUsername(username);
     try {
-      const income = await this.incomesService.getById(id);
+      const income = await this.incomesService.getById(id, user._id);
+      if (!income) return "Cannot access someone else's income";
       return { income };
     } catch {
       return `Income with id #${id} does not exist.`;
