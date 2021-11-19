@@ -31,9 +31,9 @@ export class IncomeService {
       .exec();
   }
 
-  getLastFiveByGroup(id: string) {
+  getLastFiveByGroup(id: string, userId: string) {
     return this.incomeModel
-      .find({ incomeGroup: id })
+      .find({ incomeGroup: id, user: userId })
       .sort({ updatedAt: -1 })
       .limit(5)
       .populate('user')

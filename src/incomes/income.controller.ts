@@ -50,9 +50,14 @@ export class IncomeController {
 
   @UseGuards(JwtAuthGuard)
   @Get('recent/:id')
-  getLastFiveByGroup(@Param('id') id: string) {
+  async getLastFiveByGroup(@Param('id') id: string, @Request() req) {
+    const { username } = req.user;
+    const user = await this.usersService.getByUsername(username);
     try {
-      const lastFive = this.incomesService.getLastFiveByGroup(id);
+      const lastFive = await this.incomesService.getLastFiveByGroup(
+        id,
+        user._id,
+      );
       return lastFive;
     } catch {
       return `Income group with id #${id} does not exist`;
