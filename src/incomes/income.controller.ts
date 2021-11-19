@@ -24,11 +24,19 @@ export class IncomeController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getAll(@Query() query) {
+  async getAll(@Query() query, @Request() req) {
     const { order, page, limit } = query;
 
-    const incomes = await this.incomesService.getAll(+order, +page, +limit);
-    const count = await this.incomesService.getCount();
+    const { username } = req.user;
+    const user = await this.usersService.getByUsername(username);
+
+    const incomes = await this.incomesService.getAll(
+      user._id,
+      +order,
+      +page,
+      +limit,
+    );
+    const count = await this.incomesService.getCount(user._id);
     return { incomes, count };
   }
 

@@ -10,9 +10,9 @@ export class IncomeService {
     @InjectModel(Income.name) private incomeModel: Model<IncomeDocument>,
   ) {}
 
-  getAll(order: number, page: number, limit: number) {
+  getAll(userId: string, order: number, page: number, limit: number) {
     return this.incomeModel
-      .find()
+      .find({ user: userId })
       .limit(limit)
       .skip((page - 1) * limit)
       .populate('user')
@@ -70,7 +70,7 @@ export class IncomeService {
       .exec();
   }
 
-  getCount() {
-    return this.incomeModel.count();
+  getCount(userId: string) {
+    return this.incomeModel.count({ user: userId });
   }
 }
