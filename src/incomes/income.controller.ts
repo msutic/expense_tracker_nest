@@ -42,8 +42,10 @@ export class IncomeController {
 
   @UseGuards(JwtAuthGuard)
   @Get('recent')
-  getLastFive() {
-    return this.incomesService.getLastFive();
+  async getLastFive(@Request() req) {
+    const { username } = req.user;
+    const user = await this.usersService.getByUsername(username);
+    return this.incomesService.getLastFive(user._id);
   }
 
   @UseGuards(JwtAuthGuard)
