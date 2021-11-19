@@ -10,9 +10,9 @@ export class IncomeService {
     @InjectModel(Income.name) private incomeModel: Model<IncomeDocument>,
   ) {}
 
-  getAll(order: number, page: number, limit: number) {
+  getAll(userId: string, order: number, page: number, limit: number) {
     return this.incomeModel
-      .find()
+      .find({ user: userId })
       .limit(limit)
       .skip((page - 1) * limit)
       .populate('user')
@@ -21,9 +21,9 @@ export class IncomeService {
       .exec();
   }
 
-  getLastFive() {
+  getLastFive(userId: string) {
     return this.incomeModel
-      .find()
+      .find({ user: userId })
       .sort({ updatedAt: -1 })
       .limit(5)
       .populate('user')
@@ -31,9 +31,9 @@ export class IncomeService {
       .exec();
   }
 
-  getLastFiveByGroup(id: string) {
+  getLastFiveByGroup(id: string, userId: string) {
     return this.incomeModel
-      .find({ incomeGroup: id })
+      .find({ incomeGroup: id, user: userId })
       .sort({ updatedAt: -1 })
       .limit(5)
       .populate('user')
@@ -41,36 +41,36 @@ export class IncomeService {
       .exec();
   }
 
-  getById(id: string) {
+  getById(id: string, userId: string) {
     return this.incomeModel
-      .findById(id)
+      .findOne({ _id: id, user: userId })
       .populate('user')
       .populate('incomeGroup')
       .exec();
   }
 
-  create(incomeDto: CreateIncomeDto) {
-    const income = new this.incomeModel(incomeDto);
+  create(params) {
+    const income = new this.incomeModel(params);
     return income.save();
   }
 
-  update(id: string, incomeDto: UpdateIncomeDto) {
+  update(id: string, incomeDto: UpdateIncomeDto, userId) {
     return this.incomeModel
-      .findByIdAndUpdate(id, incomeDto, { new: true })
+      .findOneAndUpdate({ _id: id, user: userId }, incomeDto, { new: true })
       .populate('user')
       .populate('incomeGroup')
       .exec();
   }
 
-  delete(id: string) {
+  delete(id: string, userId: string) {
     return this.incomeModel
-      .findByIdAndDelete(id)
+      .findOneAndDelete({ _id: id, user: userId })
       .populate('user')
       .populate('incomeGroup')
       .exec();
   }
 
-  getCount() {
-    return this.incomeModel.count();
+  getCount(userId: string) {
+    return this.incomeModel.count({ user: userId });
   }
 }
