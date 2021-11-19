@@ -62,9 +62,9 @@ export class IncomeService {
       .exec();
   }
 
-  delete(id: string) {
+  delete(id: string, userId: string) {
     return this.incomeModel
-      .findByIdAndDelete(id)
+      .findOneAndDelete({ _id: id, user: userId })
       .populate('user')
       .populate('incomeGroup')
       .exec();

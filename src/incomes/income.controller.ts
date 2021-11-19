@@ -111,9 +111,12 @@ export class IncomeController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: string, @Request() req) {
+    const { username } = req.user;
+    const user = await this.usersService.getByUsername(username);
     try {
-      const income = await this.incomesService.delete(id);
+      const income = await this.incomesService.delete(id, user._id);
+      if (!income) return "Cannot access someone else's income";
       return { status: 'success', deletedIncome: income };
     } catch {
       return `Income with id #${id} does not exist.`;
