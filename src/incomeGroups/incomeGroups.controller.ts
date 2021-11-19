@@ -63,12 +63,18 @@ export class IncomeGroupsController {
   async update(
     @Param('id') id: string,
     @Body() updateIncomeGroupDto: UpdateIncomeGroupDto,
+    @Request() req,
   ) {
+    const { username } = req.user;
+    const user = await this.usersService.getByUsername(username);
     try {
       const incomeGroup = await this.incomeGroupsService.update(
         id,
         updateIncomeGroupDto,
+        user._id,
       );
+      if (!incomeGroup)
+        return "You cannot update a default income group or someone else's";
       return { status: 'success', incomeGroup };
     } catch {
       return `Income group with id #${id} not found`;
