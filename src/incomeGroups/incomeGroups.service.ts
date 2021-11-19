@@ -12,8 +12,11 @@ export class IncomeGroupsService {
     private incomeGroupModel: Model<IncomegroupDocument>,
   ) {}
 
-  getAll() {
-    return this.incomeGroupModel.find().populate('user').exec();
+  getAll(userId: string) {
+    return this.incomeGroupModel
+      .find({ $or: [{ user: userId }, { isDefault: true }] })
+      .populate('user')
+      .exec();
   }
 
   getById(id: string) {
@@ -36,7 +39,9 @@ export class IncomeGroupsService {
     return this.incomeGroupModel.findByIdAndDelete(id).populate('user');
   }
 
-  getCount() {
-    return this.incomeGroupModel.count().exec();
+  getCount(userId: string) {
+    return this.incomeGroupModel
+      .count({ $or: [{ user: userId }, { isDefault: true }] })
+      .exec();
   }
 }

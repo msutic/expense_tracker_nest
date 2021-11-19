@@ -23,9 +23,12 @@ export class IncomeGroupsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getAll() {
-    const incomeGroups = await this.incomeGroupsService.getAll();
-    const count = await this.incomeGroupsService.getCount();
+  async getAll(@Request() req) {
+    const { username } = req.user;
+    const user = await this.usersService.getByUsername(username);
+
+    const incomeGroups = await this.incomeGroupsService.getAll(user._id);
+    const count = await this.incomeGroupsService.getCount(user._id);
 
     return { incomeGroups, count };
   }
