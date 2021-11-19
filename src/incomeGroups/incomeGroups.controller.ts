@@ -83,9 +83,13 @@ export class IncomeGroupsController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: string, @Request() req) {
+    const { username } = req.user;
+    const user = await this.usersService.getByUsername(username);
     try {
-      const incomeGroup = await this.incomeGroupsService.delete(id);
+      const incomeGroup = await this.incomeGroupsService.delete(id, user._id);
+      if (!incomeGroup)
+        return "You cannot delete a default income group or someone else's";
       return { status: 'success', deletedIncomeGroup: incomeGroup };
     } catch {
       return 'e pa nista';
