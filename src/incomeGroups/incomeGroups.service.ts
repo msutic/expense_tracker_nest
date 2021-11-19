@@ -19,8 +19,11 @@ export class IncomeGroupsService {
       .exec();
   }
 
-  getById(id: string) {
-    return this.incomeGroupModel.findById(id).populate('user').exec();
+  getById(id: string, userId: string) {
+    return this.incomeGroupModel
+      .findOne({ _id: id, $or: [{ user: userId }, { isDefault: true }] })
+      .populate('user')
+      .exec();
   }
 
   create(params) {

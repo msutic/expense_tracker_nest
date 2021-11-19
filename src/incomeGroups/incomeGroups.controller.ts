@@ -35,9 +35,12 @@ export class IncomeGroupsController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string, @Request() req) {
+    const { username } = req.user;
+    const user = await this.usersService.getByUsername(username);
     try {
-      const incomeGroup = await this.incomeGroupsService.getById(id);
+      const incomeGroup = await this.incomeGroupsService.getById(id, user._id);
+      if (!incomeGroup) return `Not authorized!`;
       return incomeGroup;
     } catch {
       return `Income group with id #${id} does not exist.`;
