@@ -92,9 +92,17 @@ export class IncomeController {
   async update(
     @Param('id') id: string,
     @Body() updateIncomeDto: UpdateIncomeDto,
+    @Request() req,
   ) {
+    const { username } = req.user;
+    const user = await this.usersService.getByUsername(username);
     try {
-      const income = await this.incomesService.update(id, updateIncomeDto);
+      const income = await this.incomesService.update(
+        id,
+        updateIncomeDto,
+        user._id,
+      );
+      if (!income) return "Cannot access someone else's income";
       return { status: 'success', income };
     } catch {
       return `Income with id #${id} not found`;

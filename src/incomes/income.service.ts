@@ -54,9 +54,9 @@ export class IncomeService {
     return income.save();
   }
 
-  update(id: string, incomeDto: UpdateIncomeDto) {
+  update(id: string, incomeDto: UpdateIncomeDto, userId) {
     return this.incomeModel
-      .findByIdAndUpdate(id, incomeDto, { new: true })
+      .findOneAndUpdate({ _id: id, user: userId }, incomeDto, { new: true })
       .populate('user')
       .populate('incomeGroup')
       .exec();
