@@ -49,8 +49,8 @@ export class IncomeService {
       .exec();
   }
 
-  create(incomeDto: CreateIncomeDto) {
-    const income = new this.incomeModel(incomeDto);
+  create(params) {
+    const income = new this.incomeModel(params);
     return income.save();
   }
 
