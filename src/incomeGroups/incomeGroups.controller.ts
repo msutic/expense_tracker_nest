@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -23,11 +24,18 @@ export class IncomeGroupsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getAll(@Request() req) {
+  async getAll(@Request() req, @Query() query) {
     const { username } = req.user;
+    const { order, page, limit } = query;
+
     const user = await this.usersService.getByUsername(username);
 
-    const incomeGroups = await this.incomeGroupsService.getAll(user._id);
+    const incomeGroups = await this.incomeGroupsService.getAll(
+      user._id,
+      +order,
+      +page,
+      +limit,
+    );
     const count = await this.incomeGroupsService.getCount(user._id);
 
     return { incomeGroups, count };

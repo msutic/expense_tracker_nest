@@ -30,6 +30,9 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(ValidatorMiddleware)
-      .forRoutes({ path: 'incomes', method: RequestMethod.GET });
+      .forRoutes(
+        { path: 'incomes', method: RequestMethod.GET },
+        { path: 'income-groups', method: RequestMethod.GET },
+      );
   }
 }

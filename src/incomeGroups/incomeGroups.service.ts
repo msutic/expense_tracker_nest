@@ -12,9 +12,12 @@ export class IncomeGroupsService {
     private incomeGroupModel: Model<IncomegroupDocument>,
   ) {}
 
-  getAll(userId: string) {
+  getAll(userId: string, order: number, page: number, limit: number) {
     return this.incomeGroupModel
       .find({ $or: [{ user: userId }, { isDefault: true }] })
+      .limit(limit)
+      .skip((page - 1) * limit)
+      .sort({ name: order })
       .populate('user')
       .exec();
   }
