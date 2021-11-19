@@ -16,7 +16,7 @@ export class IncomeGroup {
   isDefault: boolean;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  user: User;
+  user: mongoose.Types.ObjectId;
 }
 
 export const IncomeGroupSchema = SchemaFactory.createForClass(IncomeGroup);
