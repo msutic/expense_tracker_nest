@@ -10,8 +10,8 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { UsersService } from 'src/users/users.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { UsersService } from '../users/users.service';
 import { CreateIncomeGroupDto, UpdateIncomeGroupDto } from './incomeGroup.dto';
 import { IncomeGroupsService } from './incomeGroups.service';
 
